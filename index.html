@@ -1,0 +1,234 @@
+<div class="mobile-header-buttons">
+          
+            <button type="button" class="cta-menu mobile-trigger nav-menu" aria-label="open-menu">
+              <span class="bars bar-one"></span> 
+              <span class="bars bar-two"></span> 
+              <span class="bars bar-three"></span> 
+            </button>
+
+        </div>
+  <nav class="cm-navigation menu--main mobile-menu">
+  <div class="cm-navigation-wrp">
+    <ul>
+      <li>
+        <a href="#">Work</a>
+      </li>
+      <li>
+        <a href="#">What We Do</a>
+        <div class="child-trigger"></div>
+        <ul class="hs-menu-children-wrapper">
+          <li>
+            <a href="#">Digital Experience</a>
+            <div class="child-trigger"></div>
+            <ul class="hs-menu-children-wrapper">
+              <li><a href="#">Digital Experience Platforms</a></li>
+              <li><a href="#">Digital Engineering</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">Consulting</a>
+            <div class="child-trigger"></div>
+            <ul class="hs-menu-children-wrapper">
+              <li><a href="#">Strategy</a></li>
+              <li><a href="#">Operations</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">About Us</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+
+
+<style type="text/css">
+  /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+}
+.child-trigger{
+    color: white;
+}
+.nav-menu .bars {
+    background-color: #000;
+    display: block;
+    width: 25px;
+    height: 2px;
+    -webkit-transition: all .3s ease-in-out 0s;
+    transition: all .3s ease-in-out 0s;
+}
+.header__wrapper {
+    position: relative;
+    background-color: #333;
+    padding: 10px;
+}
+
+.mobile-trigger {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.bars {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 5px 0;
+}
+
+/* Hiding mobile menu initially */
+.mobile-menu {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    z-index: 1;
+}
+
+
+.mobile-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.mobile-menu li {
+    position: relative;
+    padding: 10px;
+    border-bottom: 1px solid #fff;
+}
+
+.mobile-menu li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.mobile-menu .child-trigger {
+    float: right;
+}
+
+.mobile-menu .hs-menu-children-wrapper {
+    display: none;
+    padding-left: 20px;
+}
+
+/* When mobile menu is active */
+.mobile-menu.active {
+    display: block;
+}
+
+.mobile-menu li.open > .hs-menu-children-wrapper {
+    display: block;
+}
+
+/* General Styles */
+/* General Styles for submenus */
+.hs-menu-children-wrapper {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height 0.5s ease, opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* When submenu is open */
+.mobile-menu li.open > .hs-menu-children-wrapper {
+    max-height: 500px;  /* Large enough value to handle full content height */
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Styling for the child-trigger */
+.child-trigger {
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+/* Default icon: "+" when submenu is closed */
+.child-trigger::after {
+    content: "+";
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+/* Icon change: "-" when submenu is open */
+.mobile-menu li.open > .child-trigger::after {
+    content: "-";
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+/* Ensure proper styling for deeper nested submenus */
+.hs-menu-children-wrapper li .child-trigger {
+    margin-left: 20px; /* Indent for nested menus */
+}
+
+
+
+
+
+</style>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function () {
+    const mobileTrigger = document.querySelector('.mobile-trigger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    
+    // Toggle the main hamburger menu
+    mobileTrigger.addEventListener('click', function () {
+        mobileMenu.classList.toggle('active');
+    });
+
+    // Handle multilevel menu toggling
+    const childTriggers = document.querySelectorAll('.child-trigger');
+
+    childTriggers.forEach(function (trigger) {
+        trigger.addEventListener('click', function (e) {
+            const parentLi = e.target.closest('li');  // Target the parent <li>
+            const submenu = parentLi.querySelector('.hs-menu-children-wrapper');  // Find the submenu inside the current <li>
+
+            // Close all other open submenus at the same level
+            const openMenus = parentLi.parentNode.querySelectorAll('li.open');
+            openMenus.forEach(function (openLi) {
+                if (openLi !== parentLi) {
+                    closeSubmenu(openLi.querySelector('.hs-menu-children-wrapper'));
+                    openLi.classList.remove('open');
+                }
+            });
+
+            // Toggle the current submenu
+            if (parentLi.classList.contains('open')) {
+                closeSubmenu(submenu);
+                parentLi.classList.remove('open');
+            } else {
+                openSubmenu(submenu);
+                parentLi.classList.add('open');
+            }
+        });
+    });
+
+    // Function to open submenu
+    function openSubmenu(submenu) {
+        submenu.style.maxHeight = "500px";  // Expand to full height dynamically
+        submenu.style.opacity = 1;
+        submenu.style.visibility = "visible";
+
+        // Force reflow to ensure transition happens
+        submenu.offsetHeight;
+    }
+
+    // Function to close submenu
+    function closeSubmenu(submenu) {
+        submenu.style.maxHeight = 0;  // Collapse
+        submenu.style.opacity = 0;
+        submenu.style.visibility = "hidden";
+    }
+});
+
+
+
+</script>
